@@ -1,0 +1,16 @@
+- name: list current nodes
+  shell: knife node list
+  delegate_to: localhost
+  run_once: yes
+  register: chef_nodes
+
+- name: list current clients
+  shell: knife client list
+  delegate_to: localhost
+  run_once: yes
+  register: chef_clients
+
+- name: Remove Chef Node
+  delegate_to: localhost
+  shell: "yes| knife node  delete {{ node_name }}"
+  when: node_name in chef_nodes.stdout_lines 

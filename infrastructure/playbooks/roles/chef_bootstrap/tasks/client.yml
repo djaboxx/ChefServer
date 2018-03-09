@@ -1,0 +1,10 @@
+- name: list current clients
+  shell: knife client list
+  delegate_to: localhost
+  run_once: yes
+  register: chef_clients
+
+- name: Remove Chef Client
+  delegate_to: localhost
+  shell: "yes| knife client  delete {{ node_name }}"
+  when: node_name in chef_clients.stdout_lines 

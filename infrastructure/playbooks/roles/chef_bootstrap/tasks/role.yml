@@ -1,0 +1,17 @@
+- name: list current roles
+  shell: knife role list
+  delegate_to: localhost
+  run_once: yes
+  register: chef_roles  
+ 
+- name: parse role template
+  template: src=role.json.j2 dest=/tmp/role.json
+  delegate_to: localhost
+  run_once: yes
+  when: chef_role not in chef_roles.stdout_lines
+
+- name: create chef role
+  shell: knife role from file /tmp/role.json
+  delegate_to: localhost
+  run_once: yes
+  when: chef_role not in chef_roles.stdout_lines 

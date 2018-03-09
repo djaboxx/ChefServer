@@ -1,0 +1,22 @@
+- name: remove chef dir
+  file: path=/etc/chef state={{ item }}
+  with_items:
+    - absent
+    - directory
+
+- name: copy encrypted_data_bag_secret
+  copy: src=/var/lib/jenkins/.chef/encrypted_data_bag_secret dest=/etc/chef/encrypted_data_bag_secret
+
+- name: BootStrap Host
+  delegate_to: localhost
+  shell: "knife bootstrap {{ inventory_hostname }} -E {{ chef_env }} --node-name  {{ node_name }} --run-list 'role[{{ chef_role }}]' -x root"
+  ignore_failures: true
+  register: bootstrap
+
+- name: remove node when bootstrap fails
+  include: node.yml
+  when: bootstrap.rc != 0
+
+- name: remvoe client when bootstrap fails
+  include: client.yml
+  when: bootstrap.rc != 0  

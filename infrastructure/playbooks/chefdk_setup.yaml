@@ -1,0 +1,25 @@
+- hosts: localhost
+  tasks:
+    - name: set_version
+      set_fact: os_version={{ ansible_distribution_version.split(".")[0:2]|join('.') }}
+
+    - name: download chefdk
+      when: ansible_os_family == "Darwin"
+      get_url: 
+        url: https://s3.amazonaws.com/happypathway-public-assets/chef/{{ ansible_os_family.lower() }}/{{ os_version }}/chefdk-2.5.3-1.dmg
+        dest: /tmp/chefdk-2.5.3-1.dmg
+      
+    - name: open dmg
+      delegate_to: localhost
+      when: ansible_os_family == "Darwin"
+      shell: open /tmp/chefdk-2.5.3-1.dmg
+
+    - name: create .chef directory in repo
+      file: path="{{ playbook_dir }}/../../.chef" state=directory
+      delegate_to: localhost
+      become: no
+
+    - name: setup knife.rb
+      template: src=templates/knife.rb.template dest="{{ playbook_dir }}/../../.chef/knife.rb"
+      delegate_to: localhost
+      become: no
