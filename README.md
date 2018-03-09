@@ -30,9 +30,10 @@ In the infrastructure/playbooks directory, you will find playbooks to configure 
 	-e domain_name=ops.happypathway.com \
 	-e force_org=true
 
-	This playbook assumes that you have an admin user setup in infrastructure/playbooks/chef_users.yaml and that you have it password protected and are therefor using ansible-vault. The password for ansible-vault will be kept in ~/vault_password. 
+This playbook assumes that you have an admin user setup in infrastructure/playbooks/chef_users.yaml and that you have it password protected and are therefor using ansible-vault. The password for ansible-vault will be kept in ~/vault_password. 
 
-	The Format of the chef_users.yaml file will be similar to as follows:
+The Format of the chef_users.yaml file will be similar to as follows:
+	
 	---
 	chef_admin:
     	user: devops
