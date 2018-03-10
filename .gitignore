@@ -8,6 +8,12 @@
 ##    https://github.com/Nordstrom/chefdk_bootstrap
 
 
+## Ignore Terraform State and Vagrant files
+.terraform
+.vagrant
+terraform.tfstate*
+*.log
+
 ## Ignore Chef related files and secrets
 .chef
 .chef/*.pem
