@@ -12,6 +12,7 @@
 .terraform
 .vagrant
 terraform.tfstate*
+terraform.tfvars
 *.log
 
 ## Ignore Chef related files and secrets
@@ -19,6 +20,7 @@ terraform.tfstate*
 .chef/*.pem
 .chef/encrypted_data_bag_secret
 
+.terraform
 infrastructure/playbooks/chef_users.yaml 
 *.retry
 ## Ignore Chef-Zero files
