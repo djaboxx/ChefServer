@@ -33,7 +33,8 @@ file "/etc/opscode/chef-server.rb" do
 end
 
 execute "chef-server-ctl reconfigure"
-
+execute "chef-server-ctl install chef-manage"
+execute "chef-manage-ctl reconfigure --accept-license"
 
 #directory "/root/.chef"
 #execute "chef-server-ctl user-create #{chef_user[:username]} #{chef_user[:full_name]} #{chef_user[:email]} '#{chef_user[:password]}' --filename /root/.chef/#{chef_user[:username]}.pem"
