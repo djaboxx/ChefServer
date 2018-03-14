@@ -1,0 +1,9 @@
+# See http://docs.chef.io/config_rb_knife.html for more information on knife configuration options
+
+current_dir = File.dirname(__FILE__)
+log_level                :info
+log_location             STDOUT
+node_name                "<%= node[:chef_server][:org][:short_name] %>"
+client_key               "#{current_dir}/<%= @key_name %>"
+chef_server_url          "http://localhost/organizations/<%= node[:chef_server][:org][:short_name] %>"
+cookbook_path            ["#{current_dir}/../cookbooks", "/opt/chef/cookbooks"]
