@@ -7,9 +7,9 @@ chef_user = data_bag_item("credentials", "chef-server", IO.read(node[:encrypted_
 
 chef_org = node[:chef_server][:org]
 
-directory chef_user[:key_dir] do
-	recursive true
-end
+#directory chef_user[:key_dir] do
+#	recursive true
+#end
 
 apt_package "python-pip"
 
@@ -35,21 +35,21 @@ end
 execute "chef-server-ctl reconfigure"
 
 
-directory "/root/.chef"
-execute "chef-server-ctl user-create #{chef_user[:username]} #{chef_user[:full_name]} #{chef_user[:email]} '#{chef_user[:password]}' --filename /root/.chef/#{chef_user[:username]}.pem"
-execute "chef-server-ctl org-create #{chef_org[:short_name]} '#{chef_org[:full_name]}' --association_user #{chef_user[:username]} --filename /root/.chef/#{chef_org[:short_name]}-validator.pem"
+#directory "/root/.chef"
+#execute "chef-server-ctl user-create #{chef_user[:username]} #{chef_user[:full_name]} #{chef_user[:email]} '#{chef_user[:password]}' --filename /root/.chef/#{chef_user[:username]}.pem"
+#execute "chef-server-ctl org-create #{chef_org[:short_name]} '#{chef_org[:full_name]}' --association_user #{chef_user[:username]} --filename /root/.chef/#{chef_org[:short_name]}-validator.pem"
 
-template "/root/.chef/knife.rb" do
-	source "knife.rb.erb"
-	variables({
-		key_name: "#{chef_user[:username]}.pem",
-		node_name: chef_user[:username]
-		})
-end
+#template "/root/.chef/knife.rb" do
+#	source "knife.rb.erb"
+#	variables({
+#		key_name: "#{chef_user[:username]}.pem",
+#		node_name: chef_user[:username]
+#		})
+#end
 
-file "/tmp/#{node[:chef_package]}" do
-	action :delete
-end
+#file "/tmp/#{node[:chef_package]}" do
+#	action :delete
+#end
 
 #   
 # execute "knife ssl fetch"
