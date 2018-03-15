@@ -28,11 +28,10 @@ dpkg_package "chef" do
 end
 
 directory "/opt/chef/cookbooks"
+execute "chef-server-ctl reconfigure"
 file "/etc/opscode/chef-server.rb" do
 	content "nginx['enable_non_ssl'] = true"
 end
-
-execute "chef-server-ctl reconfigure"
 execute "chef-server-ctl install chef-manage"
 execute "chef-manage-ctl reconfigure --accept-license"
 
@@ -54,4 +53,4 @@ execute "chef-manage-ctl reconfigure --accept-license"
 
 #   
 # execute "knife ssl fetch"
-execute "mv /etc/chef/* /root/.chef/"
+#execute "mv /etc/chef/* /root/.chef/"
