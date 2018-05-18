@@ -1,0 +1,15 @@
+{
+  "datacenter": "dc1",
+  "data_dir": "/opt/consul",
+  "bind_addr": "0.0.0.0",
+  "client_addr": "0.0.0.0",
+  "advertise_addr": "34.238.82.206",
+  "acl_master_token": "<% node[:consul_server][:acl_token] %>"
+  "acl_datacenter": "dc1",
+  "bootstrap_expect": 3,
+  "log_level": "INFO",
+  "node_name": "consul01",
+  "acl_default_policy": "deny",
+  "acl_down_policy": "extend-cache",
+  "server": true
+}
