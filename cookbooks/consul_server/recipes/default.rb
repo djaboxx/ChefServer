@@ -6,6 +6,10 @@
 require 'securerandom'
 
 apt_package "unzip"
+apt_package "python-pip"
+execute "pip install boto"
+execute "pip install requests"
+
 node[:consul][:packages].each do |pkg|
 	remote_file "/tmp/#{pkg[:pkg_name]}" do
 		source "#{pkg[:pkg]}"
@@ -15,11 +19,12 @@ node[:consul][:packages].each do |pkg|
 	end
 end
 
-node.normal['consul_server']['acl_token'] = SecureRandom.uuid
-
 directory "/etc/consul.d"
 template "/etc/consul.d/consul-default.json" do
 	source "consul-default.json.erb"
+	variables({
+		consul_token: SecureRandom.uuid
+	})
 end
 
 cookbook_file "/usr/local/bin/consul_join.py" do
