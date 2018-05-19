@@ -44,7 +44,7 @@ class ConsulNode(object):
             return self._servers
 
     def set_node_attrs(self):
-        my_ip = [x.ip_address for x in self._servers if x.tags.get("Name") == self.tags.get("Name")].pop()
+        my_ip = [x.ip_address for x in self.servers if x.tags.get("Name") == self.tags.get("Name")].pop()
         with open("/etc/consul.d/consul-default.json", "r") as _consul_config:
             self.consul_config = json.loads(_consul_config.read())
         self.consul_config["advertise_addr"] = my_ip
@@ -78,10 +78,22 @@ class ConsulNode(object):
         else:
             print str(out)
 
+    def restart(self):
+        p = subprocess.Popen(
+            "supervisorctl restart consul", 
+            shell=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE)
+        out, err = p.communicate()
+        if p.returncode > 0:
+            return False
+        else: 
+            return True
+
     def join(self):
         cmd = "consul join {0}:8301"
         for x in self.servers:
-            if x.tags.get("Name") == self.tags.get("Name"):
+            if x.private_ip_address == self.instance.private_ip_address:
                 continue
             cmd = cmd.format(x.private_ip_address)
             p = subprocess.Popen(cmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
@@ -93,10 +105,11 @@ class ConsulNode(object):
 
 def main():
     node = ConsulNode()
-    if node.cluster_init:
-        node.force_leave()
     node.set_node_attrs()
-    node.join()
+    if node.restart():
+        node.join()
+    else:
+        print "Could not restart Consul service"
 
 if __name__ == '__main__':
     main()

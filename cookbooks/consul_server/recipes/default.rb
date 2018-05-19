@@ -33,6 +33,12 @@ cookbook_file "/usr/local/bin/consul_join.py" do
 	mode 0755
 end
 
+cookbook_file "/etc/rc.local" do
+	mode 0755
+	owner root
+	group root
+end
+
 directory "/etc/vault"
 cookbook_file "/etc/vault/vault.conf" do
 	source "vault.conf"
